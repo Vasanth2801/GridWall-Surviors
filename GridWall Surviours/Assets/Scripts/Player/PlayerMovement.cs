@@ -22,7 +22,6 @@ public class PlayerMovement : MonoBehaviour
     Vector2 movement;
     TrailRenderer trailRenderer;
     [SerializeField] private EnemyHealth eh;
-    [SerializeField] private EnemyHealth reh;
 
     [Header("DashSettings")]
     [SerializeField] private float dashSpeed = 7f;
@@ -124,7 +123,6 @@ public class PlayerMovement : MonoBehaviour
         if(hitInfo)
         {
             eh.EnemyTakeDamage(8);
-            reh.EnemyTakeDamage(8);
             Debug.Log("Taking Damage");
             Debug.Log(hitInfo.transform.name);
             lineRenderer.SetPosition(0, firePoint.position);

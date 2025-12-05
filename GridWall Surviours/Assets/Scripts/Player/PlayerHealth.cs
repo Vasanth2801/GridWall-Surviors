@@ -17,8 +17,7 @@ public class PlayerHealth : MonoBehaviour
         healthSlider.value = currentHealth;
     }
 
-   
-    public void TakeDamage(int damage)
+    public void PlayerTakeDamage(int damage)
     {
         currentHealth -= damage;
 

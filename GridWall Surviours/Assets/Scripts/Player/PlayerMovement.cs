@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class PlayerMovement : MonoBehaviour
     PlayerController controller;
     Vector2 movement;
     TrailRenderer trailRenderer;
+    [SerializeField] private EnemyHealth eh;
+    [SerializeField] private EnemyHealth reh;
 
     [Header("DashSettings")]
     [SerializeField] private float dashSpeed = 7f;
@@ -68,12 +71,6 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-
-        if (movement.x > 0 && transform.localScale.x < 0 || movement.x < 0 && transform.localScale.x > 0)
-        {
-           // Flip();
-        }
-
         if (canDash == true && dashPressed == true)
         {
             dashPressed = false;
@@ -87,22 +84,14 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(Shoot());
         }
 
-
-
         mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
     }
-
-   /* void Flip()
-    {
-        facingDirection *= -1;
-        transform.localScale = new Vector3(transform.localScale.x * -1 , transform.localScale.y,transform.localScale.z);
-    } */
 
     private void FixedUpdate()
     {
         Move();
 
-        Vector2 lookDir = mousePos - rb.position;
+        Vector2 lookDir = (mousePos - rb.position).normalized;
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
         rb.rotation = angle;
     }
@@ -134,10 +123,10 @@ public class PlayerMovement : MonoBehaviour
 
         if(hitInfo)
         {
-            //Enemy taking damage Logic 
+            eh.EnemyTakeDamage(8);
+            reh.EnemyTakeDamage(8);
+            Debug.Log("Taking Damage");
             Debug.Log(hitInfo.transform.name);
-
-
             lineRenderer.SetPosition(0, firePoint.position);
             lineRenderer.SetPosition(1, hitInfo.point);
         }

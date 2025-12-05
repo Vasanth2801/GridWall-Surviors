@@ -13,7 +13,7 @@ public class PlayerHealth : MonoBehaviour
     {
         currentHealth = maxHealth;
         
-        healthSlider.maxValue = currentHealth;
+        healthSlider.maxValue = maxHealth;
         healthSlider.value = currentHealth;
     }
 

@@ -22,6 +22,8 @@ public class EnemyHealth : MonoBehaviour
             GetComponent<Collider2D>().enabled = false;
             GetComponent<AIPath>().enabled = false;
             GetComponent<AIDestinationSetter>().enabled = false;
+
+            Destroy(gameObject);
         }
     }
 }

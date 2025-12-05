@@ -8,20 +8,18 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float speed = 3f;
     [SerializeField] private int facingDirection = 1;
 
-
     [Header("Shooting Settings")]
     [SerializeField] Camera cam;
     Vector2 mousePos;
     [SerializeField] Transform firePoint;
-    [SerializeField] LineRenderer lineRenderer;
-    [SerializeField] private float bulletLineDuration = 0.05f;
+    [SerializeField] private GameObject bulletPrefab;
 
     [Header("References")]
     private Rigidbody2D rb;
     PlayerController controller;
     Vector2 movement;
     TrailRenderer trailRenderer;
-    [SerializeField] private EnemyHealth eh;
+    ObjectPooler pooler;
 
     [Header("DashSettings")]
     [SerializeField] private float dashSpeed = 7f;
@@ -36,6 +34,7 @@ public class PlayerMovement : MonoBehaviour
         controller = new PlayerController();
         rb = GetComponent<Rigidbody2D>();
         trailRenderer = GetComponent<TrailRenderer>();
+        pooler = FindObjectOfType<ObjectPooler>();
 
         MovementCalling();
         Dashing();
@@ -80,7 +79,7 @@ public class PlayerMovement : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Mouse0))
         {
-            StartCoroutine(Shoot());
+            Shoot();
         }
 
         mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
@@ -116,28 +115,8 @@ public class PlayerMovement : MonoBehaviour
         canDash = true;
     }
 
-    IEnumerator Shoot()
+    void Shoot()
     {
-        RaycastHit2D hitInfo =  Physics2D.Raycast(firePoint.position, firePoint.up);
-
-        if(hitInfo)
-        {
-            eh.EnemyTakeDamage(8);
-            Debug.Log("Taking Damage");
-            Debug.Log(hitInfo.transform.name);
-            lineRenderer.SetPosition(0, firePoint.position);
-            lineRenderer.SetPosition(1, hitInfo.point);
-        }
-        else
-        {
-            lineRenderer.SetPosition(0, firePoint.position);
-            lineRenderer.SetPosition(1, firePoint.position + firePoint.up * 100f);
-        }
-
-        lineRenderer.enabled = true;
-
-        yield return new WaitForSeconds(bulletLineDuration);
-
-        lineRenderer.enabled = false;
+        Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
     }
 }
